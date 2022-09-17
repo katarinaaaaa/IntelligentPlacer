@@ -1,2 +1,2 @@
 # IntelligentPlacer
-Big Lab for Machine Learning course in SPbSTU
+Лабораторная работа по курсу "Основы машинного обучения"
