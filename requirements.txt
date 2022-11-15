@@ -1,0 +1,7 @@
+numpy==1.21.5
+matplotlib==3.5.1
+cv2==4.6.0
+PIL==9.0.1
+skimage==0.19.2
+imageio==2.9.0
+scipy==1.9.3
