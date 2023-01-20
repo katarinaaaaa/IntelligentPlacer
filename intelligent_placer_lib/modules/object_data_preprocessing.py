@@ -20,8 +20,19 @@ def process_object_img(img_path: str):
     result_image = img_blur_gray <= threshold_img
 
     # морфологические операции для улучшения полученной маски
-    # используем то, что мы заранее знаем возможные предметы, чтобы улучшить распознавание предметов со светлыми участками
-    if os.path.basename(img_path) in ["key.jpg", "cream.jpg", "gum.jpg", "perfume.jpg", "card.jpg"]:
+    # используем то, что мы заранее знаем возможные предметы, чтобы улучшить распознаваниe
+    img_basename = os.path.basename(img_path)
+    if img_basename == "corrector.jpg":
+        result_image = binary_opening(result_image, footprint=np.ones((12, 12)))
+        result_image = binary_closing(result_image, footprint=np.ones((60, 60)))
+    elif img_basename == "perfume.jpg":
+        result_image = binary_closing(result_image, footprint=np.ones((50, 50)))
+        result_image = binary_opening(result_image, footprint=np.ones((22, 22)))
+    elif img_basename == "gum.jpg":
+        result_image = binary_closing(result_image, footprint=np.ones((27, 27)))
+        result_image = binary_opening(result_image, footprint=np.ones((3, 3)))
+        result_image = binary_closing(result_image, footprint=np.ones((5, 5)))
+    elif img_basename in ["key.jpg", "cream.jpg", "card.jpg"]:
         result_image = binary_opening(result_image, footprint=np.ones((1, 1)))
         result_image = binary_closing(result_image, footprint=np.ones((40, 40)))
         result_image = binary_opening(result_image, footprint=np.ones((1, 1)))
@@ -45,6 +56,6 @@ def process_object_img(img_path: str):
     mask_img = (mask * 255).astype("uint8")
     y1, x1, y2, x2 = props[mask_id + 1].bbox
     # вернем маску и обрезанное изображение предмета
-    result_image = img[y1:y2, x1:x2]
-    vis_mask = mask_img[y1:y2, x1:x2]
+    result_image = img[y1-40:y2+40, x1-40:x2+40]
+    vis_mask = mask_img[y1-40:y2+40, x1-40:x2+40]
     return result_image, vis_mask
